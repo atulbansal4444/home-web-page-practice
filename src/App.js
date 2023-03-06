@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Jokes from "./jokes";
 
 function App() {
   const [userQuery, setUserQuery] = useState('');
@@ -23,6 +24,7 @@ function App() {
           Submit
         </button>
       </div>
+      <Jokes />
     </div>
   );
 }
