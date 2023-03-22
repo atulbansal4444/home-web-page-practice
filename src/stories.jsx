@@ -19,7 +19,7 @@ const Stories = () => {
           return (
             <div key={id}>
               <a href={url}>{title}</a>
-              <div>{by} - {new Date(time).toLocaleString()}</div>
+              <div>{by} - {new Date(time * 1000).toLocaleString()}</div>
             </div>
           )
         })
