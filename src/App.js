@@ -25,7 +25,9 @@ function App() {
           Submit
         </button>
       </div>
+      <hr/>
       <Jokes />
+      <hr/>
       <Stories />
     </div>
   );
