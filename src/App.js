@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Jokes from "./jokes";
 import Stories from "./stories";
+import Tasks from "./components/Tasks";
 
 function App() {
   const [userQuery, setUserQuery] = useState('');
@@ -29,6 +30,8 @@ function App() {
       <Jokes />
       <hr/>
       <Stories />
+      <hr/>
+      <Tasks/>
     </div>
   );
 }
