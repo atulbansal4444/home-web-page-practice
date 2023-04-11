@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import PICTURES from "./data/pictures";
+import MATRIX_FRAMES from './data/matrix';
 
-const SECONDS = 1000;
+const minSec = 10;
 
-const Gallery = () => {
+const Matrix = () => {
   const [index, setIndex] = useState(0);
-  const [delay, setDelay] = useState(3 * SECONDS);
-  const [increment, setIncrement] = useState(1);
+  const [delay, setDelay] = useState(500);
+  const [increment, setIncrement] = useState(5);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((storedIndex) => {
-        return (storedIndex + increment) % PICTURES.length;
+        return (storedIndex + increment) % MATRIX_FRAMES.length;
       });
     }, delay);
     return () => {
@@ -20,14 +20,14 @@ const Gallery = () => {
   }, [delay, increment]);
 
   return (
-    <div className="Gallery">
-      <img src={PICTURES[index].image} alt="gallery" />
+    <div className="Matrix">
+      <img src={MATRIX_FRAMES[index]} alt="matrix-animation" />
       <div className="multiform">
         <div>
           Gallery Transition Delay (Seconds)
           <input type="number" onClick={(e) => {
-            const refDelay = Number(e.target.value) * SECONDS;
-            setDelay(refDelay < SECONDS ? SECONDS : refDelay);
+            const refDelay = Number(e.target.value);
+            setDelay(refDelay < minSec ? minSec : refDelay);
           }} />
         </div>
         <div>
@@ -42,4 +42,4 @@ const Gallery = () => {
   );
 };
 
-export default Gallery;
+export default Matrix;
