@@ -3,6 +3,7 @@ import Jokes from "./jokes";
 import Stories from "./stories";
 import Tasks from "./components/Tasks";
 import Gallery from "./Gallery";
+import Matrix from "./Matrix";
 
 function App() {
   const [userQuery, setUserQuery] = useState('');
@@ -14,6 +15,8 @@ function App() {
   return (
     <div className="App">
       <h1>Hello Atul</h1>
+      <Matrix />
+      <hr/>
       <div className="form">
         <input value={userQuery}
           onChange={(e) => setUserQuery(e.target.value)}
