@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useDynamicHook } from "./customHooks/useDynamicHook";
 import MATRIX_FRAMES from './data/matrix';
 
 const minSec = 10;
 
 const Matrix = () => {
-  const [index, setIndex] = useState(0);
   const [delay, setDelay] = useState(500);
   const [increment, setIncrement] = useState(5);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((storedIndex) => {
-        return (storedIndex + increment) % MATRIX_FRAMES.length;
-      });
-    }, delay);
-    return () => {
-      clearInterval(interval);
-    }
-  }, [delay, increment]);
+  const index = useDynamicHook({
+    delay,
+    increment,
+    length: MATRIX_FRAMES.length
+  });
 
   return (
     <div className="Matrix">

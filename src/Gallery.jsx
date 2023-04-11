@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PICTURES from "./data/pictures";
+import { useDynamicHook } from "./customHooks/useDynamicHook";
 
 const SECONDS = 1000;
 
 const Gallery = () => {
-  const [index, setIndex] = useState(0);
   const [delay, setDelay] = useState(3 * SECONDS);
   const [increment, setIncrement] = useState(1);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((storedIndex) => {
-        return (storedIndex + increment) % PICTURES.length;
-      });
-    }, delay);
-    return () => {
-      clearInterval(interval);
-    }
-  }, [delay, increment]);
+  const index = useDynamicHook({
+    delay,
+    increment,
+    length: PICTURES.length
+  });
 
   return (
     <div className="Gallery">
