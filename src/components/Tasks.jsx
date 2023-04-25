@@ -1,5 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useReducer } from "react";
 import uuid from 'uuid/v4';
+
+const initialState = {
+  tasks: [],
+  completedTasks: []
+};
+
+const taskReducer = (state, action) => {
+  console.log(state);
+  switch (action.type) {
+    case TYPES.ADD_TASK:
+      return {
+        ...state,
+        tasks: [...state.tasks, action.task]
+      };
+    case TYPES.COMPLETE_TASK:
+      const { completedTask } = action;
+      return {
+        ...state,
+        tasks: state.tasks.filter(t => t.id !== completedTask.id),
+        completedTasks: [...state.completedTasks, completedTask]
+      }
+    case TYPES.DELETE_TASK:
+      const { deleteTask } = action;
+      return {
+        ...state,
+        completedTasks: state.completedTasks.filter(task => task.id !== deleteTask.id)
+      }
+    default:
+      return state;
+  }
+}
+
+const TYPES = {
+  'ADD_TASK': 'ADD_TASK',
+  'COMPLETE_TASK': 'COMPLETE_TASK',
+  'DELETE_TASK': 'DELETE_TASK'
+}
 
 const LOCAL_STORAGE_KEY = 'LOCAL_STORAGE_KEY';
 
@@ -12,26 +49,21 @@ const storeTasks = (taskMap) => {
 
 const readLocalStorageTask = () => {
   const taskMap = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-  return taskMap ? taskMap : { tasks: [], completedTasks: [] };
+  return taskMap ? taskMap : initialState;
 }
 
 const Tasks = () => {
   const storedTasks = readLocalStorageTask();
+  const [state, dispatch] = useReducer(taskReducer, storedTasks);
+  const { tasks, completedTasks } = state;
   const [task, setTask] = useState("");
-  const [tasks, setTasks] = useState(storedTasks.tasks);
-  const [completedTasks, setCompletedTasks] = useState(storedTasks.completedTasks);
-
-  useEffect(() => {
-    storeTasks({ tasks, completedTasks });
-  });
 
   const completeTask = completedTask => () => {
-    setCompletedTasks([...completedTasks, completedTask]);
-    setTasks(tasks.filter(task => task.id !== completedTask.id));
+    dispatch({ type: TYPES.COMPLETE_TASK, completedTask });
   }
 
   const deleteTask = deleteTask => () => {
-    setCompletedTasks(completedTasks.filter(task => task.id !== deleteTask.id));
+    dispatch({ type: TYPES.DELETE_TASK, deleteTask });
   }
 
   return (
@@ -41,7 +73,7 @@ const Tasks = () => {
         <input value={task} onChange={(e) => setTask(e.target.value)} />
         <button
           onClick={() => {
-            setTasks([...tasks, {taskText: task, id: uuid()}]);
+            dispatch({type: TYPES.ADD_TASK, task: {taskText: task, id: uuid()}});
             setTask("");
           }}>
           Submit
